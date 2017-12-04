@@ -2,8 +2,10 @@
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(FloorDetector))]
 public class JumpMovement : MonoBehaviour
 {
+    [HideInInspector]
     public bool jumpRequested;
 
     [SerializeField]
@@ -16,15 +18,18 @@ public class JumpMovement : MonoBehaviour
 
     AudioSource audioSource;
 
+    FloorDetector floorDetector;
+
     protected void Awake()
     {
         myBody = GetComponent<Rigidbody2D>();
+        floorDetector = GetComponent<FloorDetector>();
         audioSource = GetComponent<AudioSource>();
     }
 
     protected void FixedUpdate()
     {
-        if (jumpRequested)
+        if (jumpRequested && floorDetector.isTouchingFloor)
         {
             myBody.AddForce(
                 new Vector2(0, jumpSpeed),
